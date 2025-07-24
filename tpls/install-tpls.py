@@ -84,7 +84,8 @@ if __name__ == "__main__":
     )
     parser.set_defaults(enable_shared=True)
     parser.add_argument(
-        "-j", "--jobs", help="Number of parallel jobs", type=int, default=4
+        "-j", "--jobs", help="Number of parallel jobs", type=int, default=max(1, os.cpu_count()-4)
+
     )
     parser.add_argument(
         "--netlib-blas",
