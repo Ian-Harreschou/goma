@@ -69,6 +69,50 @@
 
 #define GOMA_BC_COLLOC_C
 
+/******************************************************************************
+ *
+ * tgauss() - compute a Gaussian temperature profile as a function of position (x[0])
+ *
+ ****************************************************************************/
+
+void tgauss(double *func,
+             double d_func[], /* or MAX_VARIABLE_TYPES + MAX_CONC ?? */
+             double T0,
+             double Tmax,
+             double A,
+             double B) 
+             
+{
+  /* Local variable definition*/
+  double x = fv->x[0];     // actual position (x, used as z in cyl coords)
+  double inner_num = x - B;
+  double inner_arg = inner_num / A;
+  double exp_term = exp(- inner_arg * inner_arg);
+  double T_target = (Tmax - T0) * exp_term + T0;
+
+    if(af->Assemble_LSA_Mass_Matrix) { /* needed ?? */
+      printf("LSA Mass Matrix flag acknowledged!\n");
+      return;
+    }
+  // printf("test1, actual position x = %g\n", x);
+
+    if (af->Assemble_Jacobian) {
+      // printf("Jacobian flag acknowledged!\n");
+
+      d_func[TEMPERATURE] = 1.0; /* Jacobian sens to T */
+      // printf("Calculated Jac sensitivity to temperature.\n");
+
+      d_func[MESH_POSITION1] = 2.0 * inner_num / (A*A) * (Tmax - T0) * exp_term; /* Jacobian sens to MESH_POS1*/
+      // printf("Calculated Jac sensitivity to mesh position.\n");
+    }
+
+  *func = fv->T - T_target; /* residual: T - T_target = 0*/
+  return;
+} 
+/* END of routine tgauss                                                   */
+/****************************************************************************/
+/* IH 07/19/25 */
+
 /*******************************************************************************/
 
 int apply_point_colloc_bc(double resid_vector[], /* Residual vector for the current processor     */
@@ -341,6 +385,14 @@ int apply_point_colloc_bc(double resid_vector[], /* Residual vector for the curr
             case T_USER_BC:
               tuser(&func, d_func, BC_Types[bc_input_id].u_BC, time_intermediate);
               break;
+
+            case T_GAUSS_BC:
+              tgauss(&func, d_func,
+                      BC_Types[bc_input_id].BC_Data_Float[0],
+                      BC_Types[bc_input_id].BC_Data_Float[1],
+                      BC_Types[bc_input_id].BC_Data_Float[2],
+                      BC_Types[bc_input_id].BC_Data_Float[3]);
+              break; /* IH 7/19/25 */
 
             case DX_USER_BC:
               dx_user_surf(&func, d_func, BC_Types[bc_input_id].u_BC, time_intermediate);

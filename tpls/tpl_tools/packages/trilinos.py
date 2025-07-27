@@ -56,7 +56,19 @@ class Package(packages.CMakePackage):
         builder.add_option("-DTrilinos_SHOW_DEPRECATED_WARNINGS:BOOL=OFF")
         builder.add_option("-DTrilinos_ENABLE_SECONDARY_TESTED_CODE=ON")
         builder.add_option("-DTrilinos_ENABLE_Triutils:BOOL=ON")
-        builder.add_option("-DTrilinos_ENABLE_SEACAS:BOOL=OFF")
+
+        # SEACAS and BLOT configuration - selective enabling to avoid Matio dependency
+        builder.add_option("-DTrilinos_ENABLE_SEACAS:BOOL=ON")
+        builder.add_option("-DTrilinos_ENABLE_SEACASBlot:BOOL=ON")
+        builder.add_option("-DTrilinos_ENABLE_SEACASExodus:BOOL=ON")
+        builder.add_option("-DTrilinos_ENABLE_SEACASNemesis:BOOL=ON")
+        builder.add_option("-DTrilinos_ENABLE_SEACASIoss:BOOL=ON")
+        
+        # Explicitly disable Matio and Matio-dependent packages
+        builder.add_option("-DTPL_ENABLE_Matio:BOOL=OFF")
+        builder.add_option("-DTrilinos_ENABLE_SEACASMat2exo:BOOL=OFF")
+        
+        builder.add_option("-DTrilinos_ENABLE_ALL_OPTIONAL_PACKAGES:BOOL=OFF")
         builder.add_option("-DTrilinos_ENABLE_Epetra:BOOL=ON")
         builder.add_option("-DTrilinos_ENABLE_Xpetra:BOOL=ON")
         builder.add_option("-DTrilinos_ENABLE_Ifpack:BOOL=ON")

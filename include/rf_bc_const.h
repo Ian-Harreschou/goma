@@ -666,6 +666,8 @@
 #define T_MELT_BC            9000000
 #define QSIDE_LS_BC          4000002
 
+#define T_GAUSS_BC           1100000  /* IH 7/17/25 */
+
 /* Acoustic wave bcs	*/
 
 #define APR_PLANE_TRANS_BC 9100000

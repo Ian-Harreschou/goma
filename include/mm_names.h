@@ -41,7 +41,7 @@
  *                              won't know what to do.
  *  Boundary Condition  Step 3: Add your BC case to the correct format listing
  *                              for reading the necessary arguments from the
- *				goma input file in mm_input_bc.c
+ *				                goma input file in mm_input_bc.c
  *
  *  Boundary Condition  Step 3a: Some BC's may require changes in mm_bc.c
  *                              similar to what is done for PLANE, GEOM, CA,
@@ -3949,6 +3949,17 @@ struct BC_descriptions BC_Desc[] = {
      {0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
      SINGLE_PHASE,
      DVI_SINGLE_PHASE_DB},
+
+     {"T_GAUSS",
+     "T_GAUSS_BC",
+     COLLOCATE_SURF,
+     T_GAUSS_BC,
+     R_ENERGY,
+     SCALAR,
+     NO_ROT,
+     {0, 0, 0, 1, 0, 1, 0, 0, 0, 0},
+     SINGLE_PHASE,
+     DVI_SINGLE_PHASE_DB}, /* IH 7/19/25 */
 
     {"UUSER",
      "UUSER_BC",

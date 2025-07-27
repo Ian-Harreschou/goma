@@ -931,8 +931,12 @@ void rd_bc_specs(FILE *ifp, char *input) {
     case DX_USER_NODE_BC:
     case DY_USER_NODE_BC:
     case DZ_USER_NODE_BC:
-      if (fscanf(ifp, "%lf %lf %lf %lf", &BC_Types[ibc].BC_Data_Float[0],
-                 &BC_Types[ibc].BC_Data_Float[1], &BC_Types[ibc].BC_Data_Float[2],
+    case T_GAUSS_BC:  /* IH 07/19/25 */
+    
+      if (fscanf(ifp, "%lf %lf %lf %lf", 
+                &BC_Types[ibc].BC_Data_Float[0],
+                 &BC_Types[ibc].BC_Data_Float[1], 
+                 &BC_Types[ibc].BC_Data_Float[2],
                  &BC_Types[ibc].BC_Data_Float[3]) != 4) {
         sr = sprintf(err_msg, "%s: Expected 4 flts for %s.", yo, BC_Types[ibc].desc->name1);
         GOMA_EH(GOMA_ERROR, err_msg);
