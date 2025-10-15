@@ -1215,6 +1215,31 @@ void rd_bc_specs(FILE *ifp, char *input) {
 
       SPF_DBL_VEC(endofstring(echo_string), 6, BC_Types[ibc].BC_Data_Float);
       break;
+
+      /*
+       * Fall through for all cases which require 1 integer and 5 floating point
+       * values as input
+       */
+
+      case DISTNG_POLYN_BC: /* IH 07/28/25 */
+      /* Expecting: 1 int for species ID, then 5 floats for polynomial coefficients */
+        if (fscanf(ifp, "%d %lf %lf %lf %lf %lf",
+                  &BC_Types[ibc].BC_Data_Int[0],
+                  &BC_Types[ibc].BC_Data_Float[0],
+                  &BC_Types[ibc].BC_Data_Float[1],
+                  &BC_Types[ibc].BC_Data_Float[2],
+                  &BC_Types[ibc].BC_Data_Float[3],
+                  &BC_Types[ibc].BC_Data_Float[4]) != 6) {
+          sr = sprintf(err_msg, "%s: Expected 1 int and 5 floats for %s.",
+                      yo, BC_Types[ibc].desc->name1);
+          GOMA_EH(GOMA_ERROR, err_msg);
+        }
+
+        /* Optional: echo to string for debugging or input confirmation */
+        SPF(endofstring(echo_string), " %d", BC_Types[ibc].BC_Data_Int[0]);
+        SPF_DBL_VEC(endofstring(echo_string), 5, BC_Types[ibc].BC_Data_Float);
+        break;
+
       /*
        * Fall through for all cases which require five floating point
        * values as data input plus optional parameters

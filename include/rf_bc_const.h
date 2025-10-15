@@ -667,6 +667,7 @@
 #define QSIDE_LS_BC          4000002
 
 #define T_GAUSS_BC           1100000  /* IH 7/17/25 */
+#define DISTNG_POLYN_BC      1200000  /* IH 7/28/25 */
 
 /* Acoustic wave bcs	*/
 

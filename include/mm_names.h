@@ -215,6 +215,18 @@ struct BC_descriptions BC_Desc[] = {
      {0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
      SINGLE_PHASE,
      DVI_SINGLE_PHASE_DB},
+
+    {"DISTNG_POLYN",
+     "DISTNG_POLYN_BC",
+     COLLOCATE_SURF,
+     DISTNG_POLYN_BC,
+     R_MESH_NORMAL,
+     SCALAR,
+     R_MESH1,
+     {0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
+     SINGLE_PHASE,
+     DVI_SINGLE_PHASE_DB},
+
     {"DXDISTNG",
      "DXDISTNG_BC",
      COLLOCATE_SURF,

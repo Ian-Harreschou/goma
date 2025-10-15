@@ -358,6 +358,16 @@ int apply_point_colloc_bc(double resid_vector[], /* Residual vector for the curr
               fTmelting(&func, d_func, BC_Types[bc_input_id].BC_Data_Float[0]);
               break;
 
+            case DISTNG_POLYN_BC:
+              fTmelting_polyn(&func, d_func, 
+                            BC_Types[bc_input_id].BC_Data_Int[0],
+                            BC_Types[bc_input_id].BC_Data_Float[0],
+                            BC_Types[bc_input_id].BC_Data_Float[1],
+                            BC_Types[bc_input_id].BC_Data_Float[2],
+                            BC_Types[bc_input_id].BC_Data_Float[3],
+                            BC_Types[bc_input_id].BC_Data_Float[4]);
+              break; /* IH 07/28/25 */
+
             case SPLINEX_BC:
             case SPLINEY_BC:
             case SPLINEZ_BC:
@@ -2252,6 +2262,37 @@ void fTmelting(double *func,
   d_func[TEMPERATURE] = 1.;
   *func = fv->T - a1;
 } /* END of routine fTmelting                                                */
+/*****************************************************************************/
+
+/*****************************************************************************
+
+function fTmelting_polyn() -- analogous to fTmelting used in DISTNG_BC, but
+is a 4th degree polynomial in concentration 
+
+*****************************************************************************/
+
+void fTmelting_polyn(double *func,
+                     double d_func[],
+                     int wspec,
+                     double a, double b, double c, double d, double e)
+{
+  printf("Species: %d, POLYN Coeffs: %f %f %f %f %f\n", wspec, a, b, c, d, e);
+
+  if (af->Assemble_LSA_Mass_Matrix)
+    return;
+
+  GOMA_EH(wspec >= 0 && wspec < MAX_CONC, "Invalid species index");
+
+  double C = fv->c[wspec];  // Current species concentration
+  int var = SPECIES_UNK_0 + wspec;  // Variable index in d_func[]
+
+  double Tmp = a + b*C + c*C*C + d*C*C*C + e*C*C*C*C;
+
+  d_func[TEMPERATURE] = 1.0;
+  d_func[var] = - (b + 2.0*c*C + 3.0*d*C*C + 4.0*e*C*C*C);
+
+  *func = fv->T - Tmp;
+} /* END of routine fTmelting_polyn                                          */
 /*****************************************************************************/
 
 /******************************************************************************

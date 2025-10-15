@@ -152,6 +152,11 @@ EXTERN void fTmelting(double *, /* func */
                       double[], /* d_func - [MAX_VARIABLE_TYPES + MAX_CONC] */
                       double);  /* a1 - function parameter from data card   */
 
+EXTERN void fTmelting_polyn(double *, /* func */
+                            double[], /* d_func - [MAX_VARIABLE_TYPES + MAX_CONC] */
+                            const int, /* wspec - species number*/ 
+                            double, double, double, double, double);  /* 5 floats for 4th deg polynomial coeffs (a - e) */
+
 EXTERN int fgeneralized_dirichlet(double *,      /* func */
                                   double[],      /* d_func - MAX_VARIABLE_TYPES + MAX_CONC */
                                   const int,     /* gd_condition - denoting which condition
